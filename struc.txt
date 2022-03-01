@@ -1,0 +1,707 @@
+
+"""
+
+nt_symbols1!_EPROCESS (2624 bytes)
+   0x0 :   Pcb                                   nt_symbols1!_KPROCESS
+ 0x438 :   ProcessLock                           nt_symbols1!_EX_PUSH_LOCK
+ 0x440 :   UniqueProcessId                       nt_symbols1!pointer
+ 0x448 :   ActiveProcessLinks                    nt_symbols1!_LIST_ENTRY
+ 0x458 :   RundownProtect                        nt_symbols1!_EX_RUNDOWN_REF
+ 0x460 :   AccountingFolded                      nt_symbols1!bitfield
+ 0x460 :   AffinityPermanent                     nt_symbols1!bitfield
+ 0x460 :   AffinityUpdateEnable                  nt_symbols1!bitfield
+ 0x460 :   CrossSessionCreate                    nt_symbols1!bitfield
+ 0x460 :   DefaultPagePriority                   nt_symbols1!bitfield
+ 0x460 :   DisableSystemAllowedCpuSet            nt_symbols1!bitfield
+ 0x460 :   EmptyJobEvaluated                     nt_symbols1!bitfield
+ 0x460 :   EnableReadVmLogging                   nt_symbols1!bitfield
+ 0x460 :   EnableWriteVmLogging                  nt_symbols1!bitfield
+ 0x460 :   ExitProcessReported                   nt_symbols1!bitfield
+ 0x460 :   ExplicitAffinity                      nt_symbols1!bitfield
+ 0x460 :   FatalAccessTerminationRequested       nt_symbols1!bitfield
+ 0x460 :   Flags2                                nt_symbols1!unsigned long
+ 0x460 :   ForceWakeCharge                       nt_symbols1!bitfield
+ 0x460 :   InPrivate                             nt_symbols1!bitfield
+ 0x460 :   JobNotReallyActive                    nt_symbols1!bitfield
+ 0x460 :   LastReportMemory                      nt_symbols1!bitfield
+ 0x460 :   NeedsHandleRundown                    nt_symbols1!bitfield
+ 0x460 :   NewProcessReported                    nt_symbols1!bitfield
+ 0x460 :   PicoCreated                           nt_symbols1!bitfield
+ 0x460 :   PrimaryTokenFrozen                    nt_symbols1!bitfield
+ 0x460 :   ProcessExecutionState                 nt_symbols1!bitfield
+ 0x460 :   ProcessStateChangeInProgress          nt_symbols1!bitfield
+ 0x460 :   ProcessStateChangeRequest             nt_symbols1!bitfield
+ 0x460 :   ProcessVerifierTarget                 nt_symbols1!bitfield
+ 0x460 :   PropagateNode                         nt_symbols1!bitfield
+ 0x460 :   RefTraceEnabled                       nt_symbols1!bitfield
+ 0x460 :   ReportCommitChanges                   nt_symbols1!bitfield
+ 0x460 :   RestrictSetThreadContext              nt_symbols1!bitfield
+ 0x464 :   AddressSpaceInitialized               nt_symbols1!bitfield
+ 0x464 :   Background                            nt_symbols1!bitfield
+ 0x464 :   BreakOnTermination                    nt_symbols1!bitfield
+ 0x464 :   CreateReported                        nt_symbols1!bitfield
+ 0x464 :   DefaultIoPriority                     nt_symbols1!bitfield
+ 0x464 :   DeprioritizeViews                     nt_symbols1!bitfield
+ 0x464 :   FailFastOnCommitFail                  nt_symbols1!bitfield
+ 0x464 :   Flags                                 nt_symbols1!unsigned long
+ 0x464 :   HasAddressSpace                       nt_symbols1!bitfield
+ 0x464 :   ImageNotifyDone                       nt_symbols1!bitfield
+ 0x464 :   LaunchPrefetched                      nt_symbols1!bitfield
+ 0x464 :   ManageExecutableMemoryWrites          nt_symbols1!bitfield
+ 0x464 :   NoDebugInherit                        nt_symbols1!bitfield
+ 0x464 :   OutswapEnabled                        nt_symbols1!bitfield
+ 0x464 :   Outswapped                            nt_symbols1!bitfield
+ 0x464 :   OverrideAddressSpace                  nt_symbols1!bitfield
+ 0x464 :   PdeUpdateNeeded                       nt_symbols1!bitfield
+ 0x464 :   ProcessDelete                         nt_symbols1!bitfield
+ 0x464 :   ProcessExiting                        nt_symbols1!bitfield
+ 0x464 :   ProcessInSession                      nt_symbols1!bitfield
+ 0x464 :   ProcessInserted                       nt_symbols1!bitfield
+ 0x464 :   ProcessRundown                        nt_symbols1!bitfield
+ 0x464 :   ProcessSelfDelete                     nt_symbols1!bitfield
+ 0x464 :   SetTimerResolution                    nt_symbols1!bitfield
+ 0x464 :   SetTimerResolutionLink                nt_symbols1!bitfield
+ 0x464 :   VdmAllowed                            nt_symbols1!bitfield
+ 0x464 :   VmDeleted                             nt_symbols1!bitfield
+ 0x464 :   VmTopDown                             nt_symbols1!bitfield
+ 0x464 :   Wow64VaSpace4Gb                       nt_symbols1!bitfield
+ 0x464 :   WriteWatch                            nt_symbols1!bitfield
+ 0x468 :   CreateTime                            nt_symbols1!_LARGE_INTEGER
+ 0x470 :   ProcessQuotaUsage                     nt_symbols1!array
+ 0x480 :   ProcessQuotaPeak                      nt_symbols1!array
+ 0x490 :   PeakVirtualSize                       nt_symbols1!unsigned long long
+ 0x498 :   VirtualSize                           nt_symbols1!unsigned long long
+ 0x4a0 :   SessionProcessLinks                   nt_symbols1!_LIST_ENTRY
+ 0x4b0 :   ExceptionPortData                     nt_symbols1!pointer
+ 0x4b0 :   ExceptionPortState                    nt_symbols1!bitfield
+ 0x4b0 :   ExceptionPortValue                    nt_symbols1!unsigned long long
+ 0x4b8 :   Token                                 nt_symbols1!_EX_FAST_REF
+ 0x4c0 :   MmReserved                            nt_symbols1!unsigned long long
+ 0x4c8 :   AddressCreationLock                   nt_symbols1!_EX_PUSH_LOCK
+ 0x4d0 :   PageTableCommitmentLock               nt_symbols1!_EX_PUSH_LOCK
+ 0x4d8 :   RotateInProgress                      nt_symbols1!pointer
+ 0x4e0 :   ForkInProgress                        nt_symbols1!pointer
+ 0x4e8 :   CommitChargeJob                       nt_symbols1!pointer
+ 0x4f0 :   CloneRoot                             nt_symbols1!_RTL_AVL_TREE
+ 0x4f8 :   NumberOfPrivatePages                  nt_symbols1!unsigned long long
+ 0x500 :   NumberOfLockedPages                   nt_symbols1!unsigned long long
+ 0x508 :   Win32Process                          nt_symbols1!pointer
+ 0x510 :   Job                                   nt_symbols1!pointer
+ 0x518 :   SectionObject                         nt_symbols1!pointer
+ 0x520 :   SectionBaseAddress                    nt_symbols1!pointer
+ 0x528 :   Cookie                                nt_symbols1!unsigned long
+ 0x530 :   WorkingSetWatch                       nt_symbols1!pointer
+ 0x538 :   Win32WindowStation                    nt_symbols1!pointer
+ 0x540 :   InheritedFromUniqueProcessId          nt_symbols1!pointer
+ 0x548 :   OwnerProcessId                        nt_symbols1!unsigned long long
+ 0x550 :   Peb                                   nt_symbols1!pointer
+ 0x558 :   Session                               nt_symbols1!pointer
+ 0x560 :   Spare1                                nt_symbols1!pointer
+ 0x568 :   QuotaBlock                            nt_symbols1!pointer
+ 0x570 :   ObjectTable                           nt_symbols1!pointer
+ 0x578 :   DebugPort                             nt_symbols1!pointer
+ 0x580 :   WoW64Process                          nt_symbols1!pointer
+ 0x588 :   DeviceMap                             nt_symbols1!pointer
+ 0x590 :   EtwDataSource                         nt_symbols1!pointer
+ 0x598 :   PageDirectoryPte                      nt_symbols1!unsigned long long
+ 0x5a0 :   ImageFilePointer                      nt_symbols1!pointer
+ 0x5a8 :   ImageFileName                         nt_symbols1!array
+ 0x5b7 :   PriorityClass                         nt_symbols1!unsigned char
+ 0x5b8 :   SecurityPort                          nt_symbols1!pointer
+ 0x5c0 :   SeAuditProcessCreationInfo            nt_symbols1!_SE_AUDIT_PROCESS_CREATION_INFO
+ 0x5c8 :   JobLinks                              nt_symbols1!_LIST_ENTRY
+ 0x5d8 :   HighestUserAddress                    nt_symbols1!pointer
+ 0x5e0 :   ThreadListHead                        nt_symbols1!_LIST_ENTRY
+ 0x5f0 :   ActiveThreads                         nt_symbols1!unsigned long
+ 0x5f4 :   ImagePathHash                         nt_symbols1!unsigned long
+ 0x5f8 :   DefaultHardErrorProcessing            nt_symbols1!unsigned long
+ 0x5fc :   LastThreadExitStatus                  nt_symbols1!long
+ 0x600 :   PrefetchTrace                         nt_symbols1!_EX_FAST_REF
+ 0x608 :   LockedPagesList                       nt_symbols1!pointer
+ 0x610 :   ReadOperationCount                    nt_symbols1!_LARGE_INTEGER
+ 0x618 :   WriteOperationCount                   nt_symbols1!_LARGE_INTEGER
+ 0x620 :   OtherOperationCount                   nt_symbols1!_LARGE_INTEGER
+ 0x628 :   ReadTransferCount                     nt_symbols1!_LARGE_INTEGER
+ 0x630 :   WriteTransferCount                    nt_symbols1!_LARGE_INTEGER
+ 0x638 :   OtherTransferCount                    nt_symbols1!_LARGE_INTEGER
+ 0x640 :   CommitChargeLimit                     nt_symbols1!unsigned long long
+ 0x648 :   CommitCharge                          nt_symbols1!unsigned long long
+ 0x650 :   CommitChargePeak                      nt_symbols1!unsigned long long
+ 0x680 :   Vm                                    nt_symbols1!_MMSUPPORT_FULL
+ 0x7c0 :   MmProcessLinks                        nt_symbols1!_LIST_ENTRY
+ 0x7d0 :   ModifiedPageCount                     nt_symbols1!unsigned long
+ 0x7d4 :   ExitStatus                            nt_symbols1!long
+ 0x7d8 :   VadRoot                               nt_symbols1!_RTL_AVL_TREE
+ 0x7e0 :   VadHint                               nt_symbols1!pointer
+ 0x7e8 :   VadCount                              nt_symbols1!unsigned long long
+ 0x7f0 :   VadPhysicalPages                      nt_symbols1!unsigned long long
+ 0x7f8 :   VadPhysicalPagesLimit                 nt_symbols1!unsigned long long
+ 0x800 :   AlpcContext                           nt_symbols1!_ALPC_PROCESS_CONTEXT
+ 0x820 :   TimerResolutionLink                   nt_symbols1!_LIST_ENTRY
+ 0x830 :   TimerResolutionStackRecord            nt_symbols1!pointer
+ 0x838 :   RequestedTimerResolution              nt_symbols1!unsigned long
+ 0x83c :   SmallestTimerResolution               nt_symbols1!unsigned long
+ 0x840 :   ExitTime                              nt_symbols1!_LARGE_INTEGER
+ 0x848 :   InvertedFunctionTable                 nt_symbols1!pointer
+ 0x850 :   InvertedFunctionTableLock             nt_symbols1!_EX_PUSH_LOCK
+ 0x858 :   ActiveThreadsHighWatermark            nt_symbols1!unsigned long
+ 0x85c :   LargePrivateVadCount                  nt_symbols1!unsigned long
+ 0x860 :   ThreadListLock                        nt_symbols1!_EX_PUSH_LOCK
+ 0x868 :   WnfContext                            nt_symbols1!pointer
+ 0x870 :   ServerSilo                            nt_symbols1!pointer
+ 0x878 :   SignatureLevel                        nt_symbols1!unsigned char
+ 0x879 :   SectionSignatureLevel                 nt_symbols1!unsigned char
+ 0x87a :   Protection                            nt_symbols1!_PS_PROTECTION
+ 0x87b :   GhostCount                            nt_symbols1!bitfield
+ 0x87b :   HangCount                             nt_symbols1!bitfield
+ 0x87b :   PrefilterException                    nt_symbols1!bitfield
+ 0x87c :   AddressPolicyFrozen                   nt_symbols1!bitfield
+ 0x87c :   AltSyscall                            nt_symbols1!bitfield
+ 0x87c :   AuxiliaryProcess                      nt_symbols1!bitfield
+ 0x87c :   CommitFailLogged                      nt_symbols1!bitfield
+ 0x87c :   Crashed                               nt_symbols1!bitfield
+ 0x87c :   EnableProcessSuspendResumeLogging     nt_symbols1!bitfield
+ 0x87c :   EnableThreadSuspendResumeLogging      nt_symbols1!bitfield
+ 0x87c :   Flags3                                nt_symbols1!unsigned long
+ 0x87c :   ForegroundExternal                    nt_symbols1!bitfield
+ 0x87c :   ForegroundSystem                      nt_symbols1!bitfield
+ 0x87c :   HideImageBaseAddresses                nt_symbols1!bitfield
+ 0x87c :   HighGraphicsPriority                  nt_symbols1!bitfield
+ 0x87c :   HighMemoryPriority                    nt_symbols1!bitfield
+ 0x87c :   IndirectCpuSets                       nt_symbols1!bitfield
+ 0x87c :   JobVadsAreTracked                     nt_symbols1!bitfield
+ 0x87c :   Minimal                               nt_symbols1!bitfield
+ 0x87c :   ProcessFirstResume                    nt_symbols1!bitfield
+ 0x87c :   RelinquishedCommit                    nt_symbols1!bitfield
+ 0x87c :   ReplacingPageRoot                     nt_symbols1!bitfield
+ 0x87c :   ReserveFailLogged                     nt_symbols1!bitfield
+ 0x87c :   SecurityDomainChanged                 nt_symbols1!bitfield
+ 0x87c :   SecurityFreezeComplete                nt_symbols1!bitfield
+ 0x87c :   SubsystemProcess                      nt_symbols1!bitfield
+ 0x87c :   SystemProcess                         nt_symbols1!bitfield
+ 0x87c :   TimerResolutionIgnore                 nt_symbols1!bitfield
+ 0x87c :   VadTrackingDisabled                   nt_symbols1!bitfield
+ 0x87c :   VmProcessorHost                       nt_symbols1!bitfield
+ 0x87c :   VmProcessorHostTransition             nt_symbols1!bitfield
+ 0x880 :   DeviceAsid                            nt_symbols1!long
+ 0x888 :   SvmData                               nt_symbols1!pointer
+ 0x890 :   SvmProcessLock                        nt_symbols1!_EX_PUSH_LOCK
+ 0x898 :   SvmLock                               nt_symbols1!unsigned long long
+ 0x8a0 :   SvmProcessDeviceListHead              nt_symbols1!_LIST_ENTRY
+ 0x8b0 :   LastFreezeInterruptTime               nt_symbols1!unsigned long long
+ 0x8b8 :   DiskCounters                          nt_symbols1!pointer
+ 0x8c0 :   PicoContext                           nt_symbols1!pointer
+ 0x8c8 :   EnclaveTable                          nt_symbols1!pointer
+ 0x8d0 :   EnclaveNumber                         nt_symbols1!unsigned long long
+ 0x8d8 :   EnclaveLock                           nt_symbols1!_EX_PUSH_LOCK
+ 0x8e0 :   HighPriorityFaultsAllowed             nt_symbols1!unsigned long
+ 0x8e8 :   EnergyContext                         nt_symbols1!pointer
+ 0x8f0 :   VmContext                             nt_symbols1!pointer
+ 0x8f8 :   SequenceNumber                        nt_symbols1!unsigned long long
+ 0x900 :   CreateInterruptTime                   nt_symbols1!unsigned long long
+ 0x908 :   CreateUnbiasedInterruptTime           nt_symbols1!unsigned long long
+ 0x910 :   TotalUnbiasedFrozenTime               nt_symbols1!unsigned long long
+ 0x918 :   LastAppStateUpdateTime                nt_symbols1!unsigned long long
+ 0x920 :   LastAppState                          nt_symbols1!bitfield
+ 0x920 :   LastAppStateUptime                    nt_symbols1!bitfield
+ 0x928 :   SharedCommitCharge                    nt_symbols1!unsigned long long
+ 0x930 :   SharedCommitLock                      nt_symbols1!_EX_PUSH_LOCK
+ 0x938 :   SharedCommitLinks                     nt_symbols1!_LIST_ENTRY
+ 0x948 :   AllowedCpuSets                        nt_symbols1!unsigned long long
+ 0x948 :   AllowedCpuSetsIndirect                nt_symbols1!pointer
+ 0x950 :   DefaultCpuSets                        nt_symbols1!unsigned long long
+ 0x950 :   DefaultCpuSetsIndirect                nt_symbols1!pointer
+ 0x958 :   DiskIoAttribution                     nt_symbols1!pointer
+ 0x960 :   DxgProcess                            nt_symbols1!pointer
+ 0x968 :   Win32KFilterSet                       nt_symbols1!unsigned long
+ 0x970 :   ProcessTimerDelay                     nt_symbols1!_PS_INTERLOCKED_TIMER_DELAY_VALUES
+ 0x978 :   KTimerSets                            nt_symbols1!unsigned long
+ 0x97c :   KTimer2Sets                           nt_symbols1!unsigned long
+ 0x980 :   ThreadTimerSets                       nt_symbols1!unsigned long
+ 0x988 :   VirtualTimerListLock                  nt_symbols1!unsigned long long
+ 0x990 :   VirtualTimerListHead                  nt_symbols1!_LIST_ENTRY
+ 0x9a0 :   WakeChannel                           nt_symbols1!_WNF_STATE_NAME
+ 0x9a0 :   WakeInfo                              nt_symbols1!_PS_PROCESS_WAKE_INFORMATION
+ 0x9d0 :   MitigationFlags                       nt_symbols1!unsigned long
+ 0x9d0 :   MitigationFlagsValues                 nt_symbols1!__anonymous_19cb
+ 0x9d4 :   MitigationFlags2                      nt_symbols1!unsigned long
+ 0x9d4 :   MitigationFlags2Values                nt_symbols1!__anonymous_19cd
+ 0x9d8 :   PartitionObject                       nt_symbols1!pointer
+ 0x9e0 :   SecurityDomain                        nt_symbols1!unsigned long long
+ 0x9e8 :   ParentSecurityDomain                  nt_symbols1!unsigned long long
+ 0x9f0 :   CoverageSamplerContext                nt_symbols1!pointer
+ 0x9f8 :   MmHotPatchContext                     nt_symbols1!pointer
+ 0xa00 :   DynamicEHContinuationTargetsTree      nt_symbols1!_RTL_AVL_TREE
+ 0xa08 :   DynamicEHContinuationTargetsLock      nt_symbols1!_EX_PUSH_LOCK
+
+(primary) >>> dt("_ETHREAD")
+nt_symbols1!_ETHREAD (2200 bytes)
+   0x0 :   Tcb                                     nt_symbols1!_KTHREAD
+ 0x430 :   CreateTime                              nt_symbols1!_LARGE_INTEGER
+ 0x438 :   ExitTime                                nt_symbols1!_LARGE_INTEGER
+ 0x438 :   KeyedWaitChain                          nt_symbols1!_LIST_ENTRY
+ 0x448 :   ForwardLinkShadow                       nt_symbols1!pointer
+ 0x448 :   PostBlockList                           nt_symbols1!_LIST_ENTRY
+ 0x450 :   StartAddress                            nt_symbols1!pointer
+ 0x458 :   KeyedWaitValue                          nt_symbols1!pointer
+ 0x458 :   ReaperLink                              nt_symbols1!pointer
+ 0x458 :   TerminationPort                         nt_symbols1!pointer
+ 0x460 :   ActiveTimerListLock                     nt_symbols1!unsigned long long
+ 0x468 :   ActiveTimerListHead                     nt_symbols1!_LIST_ENTRY
+ 0x478 :   Cid                                     nt_symbols1!_CLIENT_ID
+ 0x488 :   AlpcWaitSemaphore                       nt_symbols1!_KSEMAPHORE
+ 0x488 :   KeyedWaitSemaphore                      nt_symbols1!_KSEMAPHORE
+ 0x4a8 :   ClientSecurity                          nt_symbols1!_PS_CLIENT_SECURITY_CONTEXT
+ 0x4b0 :   IrpList                                 nt_symbols1!_LIST_ENTRY
+ 0x4c0 :   TopLevelIrp                             nt_symbols1!unsigned long long
+ 0x4c8 :   DeviceToVerify                          nt_symbols1!pointer
+ 0x4d0 :   Win32StartAddress                       nt_symbols1!pointer
+ 0x4d8 :   ChargeOnlySession                       nt_symbols1!pointer
+ 0x4e0 :   LegacyPowerObject                       nt_symbols1!pointer
+ 0x4e8 :   ThreadListEntry                         nt_symbols1!_LIST_ENTRY
+ 0x4f8 :   RundownProtect                          nt_symbols1!_EX_RUNDOWN_REF
+ 0x500 :   ThreadLock                              nt_symbols1!_EX_PUSH_LOCK
+ 0x508 :   ReadClusterSize                         nt_symbols1!unsigned long
+ 0x50c :   MmLockOrdering                          nt_symbols1!long
+ 0x510 :   ActiveImpersonationInfo                 nt_symbols1!bitfield
+ 0x510 :   BreakOnTermination                      nt_symbols1!bitfield
+ 0x510 :   CopyTokenOnOpen                         nt_symbols1!bitfield
+ 0x510 :   CrossThreadFlags                        nt_symbols1!unsigned long
+ 0x510 :   DbgWerUserReportActive                  nt_symbols1!bitfield
+ 0x510 :   DisableDynamicCodeOptOut                nt_symbols1!bitfield
+ 0x510 :   ExplicitCaseSensitivity                 nt_symbols1!bitfield
+ 0x510 :   ForcedSelfTrimActive                    nt_symbols1!bitfield
+ 0x510 :   HardErrorsAreDisabled                   nt_symbols1!bitfield
+ 0x510 :   HideFromDebugger                        nt_symbols1!bitfield
+ 0x510 :   IndirectCpuSets                         nt_symbols1!bitfield
+ 0x510 :   PicoNotifyExit                          nt_symbols1!bitfield
+ 0x510 :   ReservedCrossThreadFlags                nt_symbols1!bitfield
+ 0x510 :   RundownFail                             nt_symbols1!bitfield
+ 0x510 :   SamplingCoverage                        nt_symbols1!bitfield
+ 0x510 :   SkipCreationMsg                         nt_symbols1!bitfield
+ 0x510 :   SkipTerminationMsg                      nt_symbols1!bitfield
+ 0x510 :   Terminated                              nt_symbols1!bitfield
+ 0x510 :   ThreadInserted                          nt_symbols1!bitfield
+ 0x510 :   ThreadIoPriority                        nt_symbols1!bitfield
+ 0x510 :   ThreadPagePriority                      nt_symbols1!bitfield
+ 0x510 :   UmsForceQueueTermination                nt_symbols1!bitfield
+ 0x514 :   ActiveExWorker                          nt_symbols1!bitfield
+ 0x514 :   ActivePageLists                         nt_symbols1!bitfield
+ 0x514 :   ClonedThread                            nt_symbols1!bitfield
+ 0x514 :   KeyedEventInUse                         nt_symbols1!bitfield
+ 0x514 :   MemoryMaker                             nt_symbols1!bitfield
+ 0x514 :   ReservedSameThreadPassiveFlags          nt_symbols1!bitfield
+ 0x514 :   RespectIoPriority                       nt_symbols1!bitfield
+ 0x514 :   SameThreadPassiveFlags                  nt_symbols1!unsigned long
+ 0x514 :   SecureContext                           nt_symbols1!bitfield
+ 0x514 :   SelfTerminate                           nt_symbols1!bitfield
+ 0x514 :   StoreLockThread                         nt_symbols1!bitfield
+ 0x514 :   WorkloadClass                           nt_symbols1!bitfield
+ 0x514 :   ZeroPageThread                          nt_symbols1!bitfield
+ 0x518 :   EtwCalloutActive                        nt_symbols1!bitfield
+ 0x518 :   HardFaultBehavior                       nt_symbols1!bitfield
+ 0x518 :   OwnsProcessAddressSpaceExclusive        nt_symbols1!bitfield
+ 0x518 :   OwnsProcessAddressSpaceShared           nt_symbols1!bitfield
+ 0x518 :   OwnsVadExclusive                        nt_symbols1!bitfield
+ 0x518 :   Prefetching                             nt_symbols1!bitfield
+ 0x518 :   SameThreadApcFlags                      nt_symbols1!unsigned long
+ 0x518 :   StartAddressInvalid                     nt_symbols1!bitfield
+ 0x518 :   SuppressSymbolLoad                      nt_symbols1!bitfield
+ 0x519 :   AllowKernelWritesToExecutableMemory     nt_symbols1!bitfield
+ 0x519 :   AllowUserWritesToExecutableMemory       nt_symbols1!bitfield
+ 0x519 :   OwnsVadShared                           nt_symbols1!bitfield
+ 0x519 :   SystemPagePriority                      nt_symbols1!bitfield
+ 0x519 :   SystemPagePriorityActive                nt_symbols1!bitfield
+ 0x51c :   CacheManagerActive                      nt_symbols1!unsigned char
+ 0x51d :   DisablePageFaultClustering              nt_symbols1!unsigned char
+ 0x51e :   ActiveFaultCount                        nt_symbols1!unsigned char
+ 0x51f :   LockOrderState                          nt_symbols1!unsigned char
+ 0x520 :   PerformanceCountLowReserved             nt_symbols1!unsigned long
+ 0x524 :   PerformanceCountHighReserved            nt_symbols1!long
+ 0x528 :   AlpcMessageId                           nt_symbols1!unsigned long long
+ 0x530 :   AlpcMessage                             nt_symbols1!pointer
+ 0x530 :   AlpcReceiveAttributeSet                 nt_symbols1!unsigned long
+ 0x538 :   AlpcWaitListEntry                       nt_symbols1!_LIST_ENTRY
+ 0x548 :   ExitStatus                              nt_symbols1!long
+ 0x54c :   CacheManagerCount                       nt_symbols1!unsigned long
+ 0x550 :   IoBoostCount                            nt_symbols1!unsigned long
+ 0x554 :   IoQoSBoostCount                         nt_symbols1!unsigned long
+ 0x558 :   IoQoSThrottleCount                      nt_symbols1!unsigned long
+ 0x55c :   KernelStackReference                    nt_symbols1!unsigned long
+ 0x560 :   BoostList                               nt_symbols1!_LIST_ENTRY
+ 0x570 :   DeboostList                             nt_symbols1!_LIST_ENTRY
+ 0x580 :   BoostListLock                           nt_symbols1!unsigned long long
+ 0x588 :   IrpListLock                             nt_symbols1!unsigned long long
+ 0x590 :   ReservedForSynchTracking                nt_symbols1!pointer
+ 0x598 :   CmCallbackListHead                      nt_symbols1!_SINGLE_LIST_ENTRY
+ 0x5a0 :   ActivityId                              nt_symbols1!pointer
+ 0x5a8 :   SeLearningModeListHead                  nt_symbols1!_SINGLE_LIST_ENTRY
+ 0x5b0 :   VerifierContext                         nt_symbols1!pointer
+ 0x5b8 :   AdjustedClientToken                     nt_symbols1!pointer
+ 0x5c0 :   WorkOnBehalfThread                      nt_symbols1!pointer
+ 0x5c8 :   PropertySet                             nt_symbols1!_PS_PROPERTY_SET
+ 0x5e0 :   PicoContext                             nt_symbols1!pointer
+ 0x5e8 :   UserFsBase                              nt_symbols1!unsigned long long
+ 0x5f0 :   UserGsBase                              nt_symbols1!unsigned long long
+ 0x5f8 :   EnergyValues                            nt_symbols1!pointer
+ 0x600 :   SelectedCpuSets                         nt_symbols1!unsigned long long
+ 0x600 :   SelectedCpuSetsIndirect                 nt_symbols1!pointer
+ 0x608 :   Silo                                    nt_symbols1!pointer
+ 0x610 :   ThreadName                              nt_symbols1!pointer
+ 0x618 :   SetContextState                         nt_symbols1!pointer
+ 0x620 :   LastExpectedRunTime                     nt_symbols1!unsigned long
+ 0x624 :   HeapData                                nt_symbols1!unsigned long
+ 0x628 :   OwnerEntryListHead                      nt_symbols1!_LIST_ENTRY
+ 0x638 :   DisownedOwnerEntryListLock              nt_symbols1!unsigned long long
+ 0x640 :   DisownedOwnerEntryListHead              nt_symbols1!_LIST_ENTRY
+ 0x650 :   LockEntries                             nt_symbols1!array
+ 0x890 :   CmDbgInfo                               nt_symbols1!pointer
+
+
+ nt_symbols1!_KTHREAD (1072 bytes)
+   0x0 :   Header                                      nt_symbols1!_DISPATCHER_HEADER
+  0x18 :   SListFaultAddress                           nt_symbols1!pointer
+  0x20 :   QuantumTarget                               nt_symbols1!unsigned long long
+  0x28 :   InitialStack                                nt_symbols1!pointer
+  0x30 :   StackLimit                                  nt_symbols1!pointer
+  0x38 :   StackBase                                   nt_symbols1!pointer
+  0x40 :   ThreadLock                                  nt_symbols1!unsigned long long
+  0x48 :   CycleTime                                   nt_symbols1!unsigned long long
+  0x50 :   CurrentRunTime                              nt_symbols1!unsigned long
+  0x54 :   ExpectedRunTime                             nt_symbols1!unsigned long
+  0x58 :   KernelStack                                 nt_symbols1!pointer
+  0x60 :   StateSaveArea                               nt_symbols1!pointer
+  0x68 :   SchedulingGroup                             nt_symbols1!pointer
+  0x70 :   WaitRegister                                nt_symbols1!_KWAIT_STATUS_REGISTER
+  0x71 :   Running                                     nt_symbols1!unsigned char
+  0x72 :   Alerted                                     nt_symbols1!array
+  0x74 :   Alertable                                   nt_symbols1!bitfield
+  0x74 :   ApcInterruptRequest                         nt_symbols1!bitfield
+  0x74 :   ApcQueueable                                nt_symbols1!bitfield
+  0x74 :   AutoBoostActive                             nt_symbols1!bitfield
+  0x74 :   BypassProcessFreeze                         nt_symbols1!bitfield
+  0x74 :   CalloutActive                               nt_symbols1!bitfield
+  0x74 :   CetUserShadowStack                          nt_symbols1!bitfield
+  0x74 :   MiscFlags                                   nt_symbols1!long
+  0x74 :   ProcessDetachActive                         nt_symbols1!bitfield
+  0x74 :   QuantumEndMigrate                           nt_symbols1!bitfield
+  0x74 :   ReadyTransition                             nt_symbols1!bitfield
+  0x74 :   Reserved                                    nt_symbols1!bitfield
+  0x74 :   ReservedStackInUse                          nt_symbols1!bitfield
+  0x74 :   ScbReadyQueue                               nt_symbols1!bitfield
+  0x74 :   SuspendSchedulerApcWait                     nt_symbols1!bitfield
+  0x74 :   SuspendedWaitMode                           nt_symbols1!bitfield
+  0x74 :   SystemAffinityActive                        nt_symbols1!bitfield
+  0x74 :   SystemThread                                nt_symbols1!bitfield
+  0x74 :   TimerActive                                 nt_symbols1!bitfield
+  0x74 :   TimerSuspended                              nt_symbols1!bitfield
+  0x74 :   UmsDirectedSwitchEnable                     nt_symbols1!bitfield
+  0x74 :   UmsPerformingSyscall                        nt_symbols1!bitfield
+  0x74 :   UserStackWalkActive                         nt_symbols1!bitfield
+  0x74 :   WaitNext                                    nt_symbols1!bitfield
+  0x78 :   AlertedByThreadId                           nt_symbols1!bitfield
+  0x78 :   AutoAlignment                               nt_symbols1!bitfield
+  0x78 :   AutoBoostEntriesExhausted                   nt_symbols1!bitfield
+  0x78 :   ChargeOnlySchedulingGroup                   nt_symbols1!bitfield
+  0x78 :   DeferPreemption                             nt_symbols1!bitfield
+  0x78 :   DisableBoost                                nt_symbols1!bitfield
+  0x78 :   DisableQuantum                              nt_symbols1!bitfield
+  0x78 :   EnableStackSwap                             nt_symbols1!bitfield
+  0x78 :   EtwStackTraceApcInserted                    nt_symbols1!bitfield
+  0x78 :   ForceDeferSchedule                          nt_symbols1!bitfield
+  0x78 :   FreezeCount                                 nt_symbols1!bitfield
+  0x78 :   GuiThread                                   nt_symbols1!bitfield
+  0x78 :   KernelStackResident                         nt_symbols1!bitfield
+  0x78 :   ProcessStackCountDecremented                nt_symbols1!bitfield
+  0x78 :   QuantumDonation                             nt_symbols1!bitfield
+  0x78 :   QueueDeferPreemption                        nt_symbols1!bitfield
+  0x78 :   RestrictedGuiThread                         nt_symbols1!bitfield
+  0x78 :   SharedReadyQueueAffinity                    nt_symbols1!bitfield
+  0x78 :   TerminateRequestReason                      nt_symbols1!bitfield
+  0x78 :   TerminationApcRequest                       nt_symbols1!bitfield
+  0x78 :   ThreadFlags                                 nt_symbols1!long
+  0x78 :   ThreadFlagsSpare                            nt_symbols1!bitfield
+  0x78 :   ThreadFlagsSpare2                           nt_symbols1!bitfield
+  0x78 :   VpBackingThread                             nt_symbols1!bitfield
+  0x7c :   Tag                                         nt_symbols1!unsigned char
+  0x7d :   SystemHeteroCpuPolicy                       nt_symbols1!unsigned char
+  0x7e :   ExplicitSystemHeteroCpuPolicy               nt_symbols1!bitfield
+  0x7e :   UserHeteroCpuPolicy                         nt_symbols1!bitfield
+  0x7f :   RunningNonRetpolineCode                     nt_symbols1!bitfield
+  0x7f :   SpecCtrl                                    nt_symbols1!unsigned char
+  0x7f :   SpecCtrlSpare                               nt_symbols1!bitfield
+  0x80 :   SystemCallNumber                            nt_symbols1!unsigned long
+  0x84 :   ReadyTime                                   nt_symbols1!unsigned long
+  0x88 :   FirstArgument                               nt_symbols1!pointer
+  0x90 :   TrapFrame                                   nt_symbols1!pointer
+  0x98 :   ApcState                                    nt_symbols1!_KAPC_STATE
+  0x98 :   ApcStateFill                                nt_symbols1!array
+  0xc3 :   Priority                                    nt_symbols1!char
+  0xc4 :   UserIdealProcessor                          nt_symbols1!unsigned long
+  0xc8 :   WaitStatus                                  nt_symbols1!long long
+  0xd0 :   WaitBlockList                               nt_symbols1!pointer
+  0xd8 :   SwapListEntry                               nt_symbols1!_SINGLE_LIST_ENTRY
+  0xd8 :   WaitListEntry                               nt_symbols1!_LIST_ENTRY
+  0xe8 :   Queue                                       nt_symbols1!pointer
+  0xf0 :   Teb                                         nt_symbols1!pointer
+  0xf8 :   RelativeTimerBias                           nt_symbols1!unsigned long long
+ 0x100 :   Timer                                       nt_symbols1!_KTIMER
+ 0x140 :   WaitBlock                                   nt_symbols1!array
+ 0x140 :   WaitBlockFill10                             nt_symbols1!array
+ 0x140 :   WaitBlockFill11                             nt_symbols1!array
+ 0x140 :   WaitBlockFill4                              nt_symbols1!array
+ 0x140 :   WaitBlockFill5                              nt_symbols1!array
+ 0x140 :   WaitBlockFill6                              nt_symbols1!array
+ 0x140 :   WaitBlockFill7                              nt_symbols1!array
+ 0x140 :   WaitBlockFill8                              nt_symbols1!array
+ 0x140 :   WaitBlockFill9                              nt_symbols1!array
+ 0x154 :   ContextSwitches                             nt_symbols1!unsigned long
+ 0x168 :   ThreadCounters                              nt_symbols1!pointer
+ 0x184 :   State                                       nt_symbols1!unsigned char
+ 0x185 :   Spare13                                     nt_symbols1!char
+ 0x186 :   WaitIrql                                    nt_symbols1!unsigned char
+ 0x187 :   WaitMode                                    nt_symbols1!char
+ 0x198 :   XStateSave                                  nt_symbols1!pointer
+ 0x1b4 :   WaitTime                                    nt_symbols1!unsigned long
+ 0x1c8 :   Win32Thread                                 nt_symbols1!pointer
+ 0x1e4 :   CombinedApcDisable                          nt_symbols1!unsigned long
+ 0x1e4 :   KernelApcDisable                            nt_symbols1!short
+ 0x1e6 :   SpecialApcDisable                           nt_symbols1!short
+ 0x1f0 :   Ucb                                         nt_symbols1!pointer
+ 0x1f8 :   Uch                                         nt_symbols1!pointer
+ 0x200 :   BamQosLevel                                 nt_symbols1!bitfield
+ 0x200 :   ThreadFlags2                                nt_symbols1!long
+ 0x200 :   ThreadFlags2Reserved                        nt_symbols1!bitfield
+ 0x204 :   Spare21                                     nt_symbols1!unsigned long
+ 0x208 :   QueueListEntry                              nt_symbols1!_LIST_ENTRY
+ 0x218 :   NextProcessor                               nt_symbols1!unsigned long
+ 0x218 :   NextProcessorNumber                         nt_symbols1!bitfield
+ 0x218 :   SharedReadyQueue                            nt_symbols1!bitfield
+ 0x21c :   QueuePriority                               nt_symbols1!long
+ 0x220 :   Process                                     nt_symbols1!pointer
+ 0x228 :   UserAffinity                                nt_symbols1!_GROUP_AFFINITY
+ 0x228 :   UserAffinityFill                            nt_symbols1!array
+ 0x232 :   PreviousMode                                nt_symbols1!char
+ 0x233 :   BasePriority                                nt_symbols1!char
+ 0x234 :   ForegroundBoost                             nt_symbols1!bitfield
+ 0x234 :   PriorityDecrement                           nt_symbols1!char
+ 0x234 :   UnusualBoost                                nt_symbols1!bitfield
+ 0x235 :   Preempted                                   nt_symbols1!unsigned char
+ 0x236 :   AdjustReason                                nt_symbols1!unsigned char
+ 0x237 :   AdjustIncrement                             nt_symbols1!char
+ 0x238 :   AffinityVersion                             nt_symbols1!unsigned long long
+ 0x240 :   Affinity                                    nt_symbols1!_GROUP_AFFINITY
+ 0x240 :   AffinityFill                                nt_symbols1!array
+ 0x24a :   ApcStateIndex                               nt_symbols1!unsigned char
+ 0x24b :   WaitBlockCount                              nt_symbols1!unsigned char
+ 0x24c :   IdealProcessor                              nt_symbols1!unsigned long
+ 0x250 :   NpxState                                    nt_symbols1!unsigned long long
+ 0x258 :   SavedApcState                               nt_symbols1!_KAPC_STATE
+ 0x258 :   SavedApcStateFill                           nt_symbols1!array
+ 0x283 :   WaitReason                                  nt_symbols1!unsigned char
+ 0x284 :   SuspendCount                                nt_symbols1!char
+ 0x285 :   Saturation                                  nt_symbols1!char
+ 0x286 :   SListFaultCount                             nt_symbols1!unsigned short
+ 0x288 :   SchedulerApc                                nt_symbols1!_KAPC
+ 0x288 :   SchedulerApcFill0                           nt_symbols1!array
+ 0x288 :   SchedulerApcFill1                           nt_symbols1!array
+ 0x288 :   SchedulerApcFill2                           nt_symbols1!array
+ 0x288 :   SchedulerApcFill3                           nt_symbols1!array
+ 0x288 :   SchedulerApcFill4                           nt_symbols1!array
+ 0x288 :   SchedulerApcFill5                           nt_symbols1!array
+ 0x289 :   ResourceIndex                               nt_symbols1!unsigned char
+ 0x28b :   QuantumReset                                nt_symbols1!unsigned char
+ 0x28c :   KernelTime                                  nt_symbols1!unsigned long
+ 0x2c8 :   WaitPrcb                                    nt_symbols1!pointer
+ 0x2d0 :   LegoData                                    nt_symbols1!pointer
+ 0x2db :   CallbackNestingLevel                        nt_symbols1!unsigned char
+ 0x2dc :   UserTime                                    nt_symbols1!unsigned long
+ 0x2e0 :   SuspendEvent                                nt_symbols1!_KEVENT
+ 0x2f8 :   ThreadListEntry                             nt_symbols1!_LIST_ENTRY
+ 0x308 :   MutantListHead                              nt_symbols1!_LIST_ENTRY
+ 0x318 :   AbEntrySummary                              nt_symbols1!unsigned char
+ 0x319 :   AbWaitEntryCount                            nt_symbols1!unsigned char
+ 0x31a :   AbAllocationRegionCount                     nt_symbols1!unsigned char
+ 0x31b :   SystemPriority                              nt_symbols1!char
+ 0x31c :   SecureThreadCookie                          nt_symbols1!unsigned long
+ 0x320 :   LockEntries                                 nt_symbols1!pointer
+ 0x328 :   PropagateBoostsEntry                        nt_symbols1!_SINGLE_LIST_ENTRY
+ 0x330 :   IoSelfBoostsEntry                           nt_symbols1!_SINGLE_LIST_ENTRY
+ 0x338 :   PriorityFloorCounts                         nt_symbols1!array
+ 0x348 :   PriorityFloorCountsReserved                 nt_symbols1!array
+ 0x358 :   PriorityFloorSummary                        nt_symbols1!unsigned long
+ 0x35c :   AbCompletedIoBoostCount                     nt_symbols1!long
+ 0x360 :   AbCompletedIoQoSBoostCount                  nt_symbols1!long
+ 0x364 :   KeReferenceCount                            nt_symbols1!short
+ 0x366 :   AbOrphanedEntrySummary                      nt_symbols1!unsigned char
+ 0x367 :   AbOwnedEntryCount                           nt_symbols1!unsigned char
+ 0x368 :   ForegroundLossTime                          nt_symbols1!unsigned long
+ 0x370 :   ForegroundDpcStackListEntry                 nt_symbols1!_SINGLE_LIST_ENTRY
+ 0x370 :   GlobalForegroundListEntry                   nt_symbols1!_LIST_ENTRY
+ 0x378 :   InGlobalForegroundList                      nt_symbols1!unsigned long long
+ 0x380 :   ReadOperationCount                          nt_symbols1!long long
+ 0x388 :   WriteOperationCount                         nt_symbols1!long long
+ 0x390 :   OtherOperationCount                         nt_symbols1!long long
+ 0x398 :   ReadTransferCount                           nt_symbols1!long long
+ 0x3a0 :   WriteTransferCount                          nt_symbols1!long long
+ 0x3a8 :   OtherTransferCount                          nt_symbols1!long long
+ 0x3b0 :   QueuedScb                                   nt_symbols1!pointer
+ 0x3b8 :   ThreadTimerDelay                            nt_symbols1!unsigned long
+ 0x3bc :   PpmPolicy                                   nt_symbols1!bitfield
+ 0x3bc :   ThreadFlags3                                nt_symbols1!long
+ 0x3bc :   ThreadFlags3Reserved                        nt_symbols1!bitfield
+ 0x3bc :   ThreadFlags3Reserved2                       nt_symbols1!bitfield
+ 0x3c0 :   TracingPrivate                              nt_symbols1!array
+ 0x3c8 :   SchedulerAssist                             nt_symbols1!pointer
+ 0x3d0 :   AbWaitObject                                nt_symbols1!pointer
+ 0x3d8 :   ReservedPreviousReadyTimeValue              nt_symbols1!unsigned long
+ 0x3e0 :   KernelWaitTime                              nt_symbols1!unsigned long long
+ 0x3e8 :   UserWaitTime                                nt_symbols1!unsigned long long
+ 0x3f0 :   GlobalUpdateVpThreadPriorityListEntry       nt_symbols1!_LIST_ENTRY
+ 0x3f0 :   UpdateVpThreadPriorityDpcStackListEntry     nt_symbols1!_SINGLE_LIST_ENTRY
+ 0x3f8 :   InGlobalUpdateVpThreadPriorityList          nt_symbols1!unsigned long long
+ 0x400 :   SchedulerAssistPriorityFloor                nt_symbols1!long
+ 0x404 :   Spare28                                     nt_symbols1!unsigned long
+ 0x408 :   EndPadding                                  nt_symbols1!array
+
+ (primary) >>> dt("_TEB")
+nt_symbols1!_TEB (6200 bytes)
+    0x0 :   NtTib                                  nt_symbols1!_NT_TIB
+   0x38 :   EnvironmentPointer                     nt_symbols1!pointer
+   0x40 :   ClientId                               nt_symbols1!_CLIENT_ID
+   0x50 :   ActiveRpcHandle                        nt_symbols1!pointer
+   0x58 :   ThreadLocalStoragePointer              nt_symbols1!pointer
+   0x60 :   ProcessEnvironmentBlock                nt_symbols1!pointer
+   0x68 :   LastErrorValue                         nt_symbols1!unsigned long
+   0x6c :   CountOfOwnedCriticalSections           nt_symbols1!unsigned long
+   0x70 :   CsrClientThread                        nt_symbols1!pointer
+   0x78 :   Win32ThreadInfo                        nt_symbols1!pointer
+   0x80 :   User32Reserved                         nt_symbols1!array
+   0xe8 :   UserReserved                           nt_symbols1!array
+  0x100 :   WOW32Reserved                          nt_symbols1!pointer
+  0x108 :   CurrentLocale                          nt_symbols1!unsigned long
+  0x10c :   FpSoftwareStatusRegister               nt_symbols1!unsigned long
+  0x110 :   ReservedForDebuggerInstrumentation     nt_symbols1!array
+  0x190 :   SystemReserved1                        nt_symbols1!array
+  0x280 :   PlaceholderCompatibilityMode           nt_symbols1!char
+  0x281 :   PlaceholderHydrationAlwaysExplicit     nt_symbols1!unsigned char
+  0x282 :   PlaceholderReserved                    nt_symbols1!array
+  0x28c :   ProxiedProcessId                       nt_symbols1!unsigned long
+  0x290 :   _ActivationStack                       nt_symbols1!_ACTIVATION_CONTEXT_STACK
+  0x2b8 :   WorkingOnBehalfTicket                  nt_symbols1!array
+  0x2c0 :   ExceptionCode                          nt_symbols1!long
+  0x2c4 :   Padding0                               nt_symbols1!array
+  0x2c8 :   ActivationContextStackPointer          nt_symbols1!pointer
+  0x2d0 :   InstrumentationCallbackSp              nt_symbols1!unsigned long long
+  0x2d8 :   InstrumentationCallbackPreviousPc      nt_symbols1!unsigned long long
+  0x2e0 :   InstrumentationCallbackPreviousSp      nt_symbols1!unsigned long long
+  0x2e8 :   TxFsContext                            nt_symbols1!unsigned long
+  0x2ec :   InstrumentationCallbackDisabled        nt_symbols1!unsigned char
+  0x2ed :   UnalignedLoadStoreExceptions           nt_symbols1!unsigned char
+  0x2ee :   Padding1                               nt_symbols1!array
+  0x2f0 :   GdiTebBatch                            nt_symbols1!_GDI_TEB_BATCH
+  0x7d8 :   RealClientId                           nt_symbols1!_CLIENT_ID
+  0x7e8 :   GdiCachedProcessHandle                 nt_symbols1!pointer
+  0x7f0 :   GdiClientPID                           nt_symbols1!unsigned long
+  0x7f4 :   GdiClientTID                           nt_symbols1!unsigned long
+  0x7f8 :   GdiThreadLocalInfo                     nt_symbols1!pointer
+  0x800 :   Win32ClientInfo                        nt_symbols1!array
+  0x9f0 :   glDispatchTable                        nt_symbols1!array
+ 0x1138 :   glReserved1                            nt_symbols1!array
+ 0x1220 :   glReserved2                            nt_symbols1!pointer
+ 0x1228 :   glSectionInfo                          nt_symbols1!pointer
+ 0x1230 :   glSection                              nt_symbols1!pointer
+ 0x1238 :   glTable                                nt_symbols1!pointer
+ 0x1240 :   glCurrentRC                            nt_symbols1!pointer
+ 0x1248 :   glContext                              nt_symbols1!pointer
+ 0x1250 :   LastStatusValue                        nt_symbols1!unsigned long
+ 0x1254 :   Padding2                               nt_symbols1!array
+ 0x1258 :   StaticUnicodeString                    nt_symbols1!_UNICODE_STRING
+ 0x1268 :   StaticUnicodeBuffer                    nt_symbols1!array
+ 0x1472 :   Padding3                               nt_symbols1!array
+ 0x1478 :   DeallocationStack                      nt_symbols1!pointer
+ 0x1480 :   TlsSlots                               nt_symbols1!array
+ 0x1680 :   TlsLinks                               nt_symbols1!_LIST_ENTRY
+ 0x1690 :   Vdm                                    nt_symbols1!pointer
+ 0x1698 :   ReservedForNtRpc                       nt_symbols1!pointer
+ 0x16a0 :   DbgSsReserved                          nt_symbols1!array
+ 0x16b0 :   HardErrorMode                          nt_symbols1!unsigned long
+ 0x16b4 :   Padding4                               nt_symbols1!array
+ 0x16b8 :   Instrumentation                        nt_symbols1!array
+ 0x1710 :   ActivityId                             nt_symbols1!_GUID
+ 0x1720 :   SubProcessTag                          nt_symbols1!pointer
+ 0x1728 :   PerflibData                            nt_symbols1!pointer
+ 0x1730 :   EtwTraceData                           nt_symbols1!pointer
+ 0x1738 :   WinSockData                            nt_symbols1!pointer
+ 0x1740 :   GdiBatchCount                          nt_symbols1!unsigned long
+ 0x1744 :   CurrentIdealProcessor                  nt_symbols1!_PROCESSOR_NUMBER
+ 0x1744 :   IdealProcessorValue                    nt_symbols1!unsigned long
+ 0x1744 :   ReservedPad0                           nt_symbols1!unsigned char
+ 0x1745 :   ReservedPad1                           nt_symbols1!unsigned char
+ 0x1746 :   ReservedPad2                           nt_symbols1!unsigned char
+ 0x1747 :   IdealProcessor                         nt_symbols1!unsigned char
+ 0x1748 :   GuaranteedStackBytes                   nt_symbols1!unsigned long
+ 0x174c :   Padding5                               nt_symbols1!array
+ 0x1750 :   ReservedForPerf                        nt_symbols1!pointer
+ 0x1758 :   ReservedForOle                         nt_symbols1!pointer
+ 0x1760 :   WaitingOnLoaderLock                    nt_symbols1!unsigned long
+ 0x1764 :   Padding6                               nt_symbols1!array
+ 0x1768 :   SavedPriorityState                     nt_symbols1!pointer
+ 0x1770 :   ReservedForCodeCoverage                nt_symbols1!unsigned long long
+ 0x1778 :   ThreadPoolData                         nt_symbols1!pointer
+ 0x1780 :   TlsExpansionSlots                      nt_symbols1!pointer
+ 0x1788 :   DeallocationBStore                     nt_symbols1!pointer
+ 0x1790 :   BStoreLimit                            nt_symbols1!pointer
+ 0x1798 :   MuiGeneration                          nt_symbols1!unsigned long
+ 0x179c :   IsImpersonating                        nt_symbols1!unsigned long
+ 0x17a0 :   NlsCache                               nt_symbols1!pointer
+ 0x17a8 :   pShimData                              nt_symbols1!pointer
+ 0x17b0 :   HeapData                               nt_symbols1!unsigned long
+ 0x17b4 :   Padding7                               nt_symbols1!array
+ 0x17b8 :   CurrentTransactionHandle               nt_symbols1!pointer
+ 0x17c0 :   ActiveFrame                            nt_symbols1!pointer
+ 0x17c8 :   FlsData                                nt_symbols1!pointer
+ 0x17d0 :   PreferredLanguages                     nt_symbols1!pointer
+ 0x17d8 :   UserPrefLanguages                      nt_symbols1!pointer
+ 0x17e0 :   MergedPrefLanguages                    nt_symbols1!pointer
+ 0x17e8 :   MuiImpersonation                       nt_symbols1!unsigned long
+ 0x17ec :   CrossTebFlags                          nt_symbols1!unsigned short
+ 0x17ec :   SpareCrossTebBits                      nt_symbols1!bitfield
+ 0x17ee :   ClonedThread                           nt_symbols1!bitfield
+ 0x17ee :   DisableUserStackWalk                   nt_symbols1!bitfield
+ 0x17ee :   HasFiberData                           nt_symbols1!bitfield
+ 0x17ee :   InDebugPrint                           nt_symbols1!bitfield
+ 0x17ee :   InitialThread                          nt_symbols1!bitfield
+ 0x17ee :   LoadOwner                              nt_symbols1!bitfield
+ 0x17ee :   LoaderWorker                           nt_symbols1!bitfield
+ 0x17ee :   RanProcessInit                         nt_symbols1!bitfield
+ 0x17ee :   RtlExceptionAttached                   nt_symbols1!bitfield
+ 0x17ee :   SafeThunkCall                          nt_symbols1!bitfield
+ 0x17ee :   SameTebFlags                           nt_symbols1!unsigned short
+ 0x17ee :   SessionAware                           nt_symbols1!bitfield
+ 0x17ee :   SkipLoaderInit                         nt_symbols1!bitfield
+ 0x17ee :   SkipThreadAttach                       nt_symbols1!bitfield
+ 0x17ee :   SpareSameTebBits                       nt_symbols1!bitfield
+ 0x17ee :   SuppressDebugMsg                       nt_symbols1!bitfield
+ 0x17ee :   WerInShipAssertCode                    nt_symbols1!bitfield
+ 0x17f0 :   TxnScopeEnterCallback                  nt_symbols1!pointer
+ 0x17f8 :   TxnScopeExitCallback                   nt_symbols1!pointer
+ 0x1800 :   TxnScopeContext                        nt_symbols1!pointer
+ 0x1808 :   LockCount                              nt_symbols1!unsigned long
+ 0x180c :   WowTebOffset                           nt_symbols1!long
+ 0x1810 :   ResourceRetValue                       nt_symbols1!pointer
+ 0x1818 :   ReservedForWdf                         nt_symbols1!pointer
+ 0x1820 :   ReservedForCrt                         nt_symbols1!unsigned long long
+ 0x1828 :   EffectiveContainerId                   nt_symbols1!_GUID
+"""
+
+nt_symbols1!_NT_TIB (56 bytes)
+  0x0 :   ExceptionList            nt_symbols1!pointer
+  0x8 :   StackBase                nt_symbols1!pointer
+ 0x10 :   StackLimit               nt_symbols1!pointer
+ 0x18 :   SubSystemTib             nt_symbols1!pointer
+ 0x20 :   FiberData                nt_symbols1!pointer
+ 0x20 :   Version                  nt_symbols1!unsigned long
+ 0x28 :   ArbitraryUserPointer     nt_symbols1!pointer
+ 0x30 :   Self                     nt_symbols1!pointer
+(primary) >>> 

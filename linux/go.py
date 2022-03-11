@@ -1,5 +1,7 @@
+from operator import mod
 from typing import List, Callable, Any, Tuple
 import logging, struct, binascii
+from typing_extensions import runtime
 from magic import version
 
 from volatility3.framework import renderers, interfaces, constants
@@ -84,7 +86,9 @@ class Go(interfaces.plugins.PluginInterface):
             [
                 ("PID", int),
                 ("COMM", str),
-                ("GO_VERSION", str)
+                ("GO_VERSION", str),
+                ("GoVer PTR", format_hints.Hex),
+                ("MOD_INFO PTR", format_hints.Hex)
 
             ],
             generator=self._generator(list_procs)
@@ -151,18 +155,43 @@ class Go(interfaces.plugins.PluginInterface):
             sections=vma_regions
         )
 
-        # if go_version != "":
-        #     for offset in proc_layer.scan(
-        #         context=self.context,
-        #         scanner=scanners.RegExScanner(rb"[A-Za-z\/_.0-9]+.go"),
-        #         sections=vma_regions
-        #     ):
+        golog.info(f"Go version: {go_version}")
+        if go_version != "":
+            golog.info("parsing buildinfo now.\n")
+            for offset in proc_layer.scan(
+                context=self.context,
+                scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
+                sections=vma_regions
+            ):
 
-        #         data = proc_layer.read(offset, 0xff)
-        #         golog.debug(data.decode(errors='ignore'))
+                data = proc_layer.read(offset, 0xff)
+
+                pointer_size = struct.unpack("<H", data[14:16])[0]
+
+                endianess = data[15] & 2
+
+                endian = ""
+                if endianess == 0:
+                    golog.info("Little-endian program.")
+                    endian = "<"
+                else:
+                    endian = ">"
+
+                runtime_buildver_addr = struct.unpack(f"{endian}Q", data[16:16+pointer_size])[0]
+                runtime_modinfo_addr = struct.unpack(f"{endian}Q", data[16+pointer_size:16+(pointer_size*2)])[0]
+
+                golog.debug(f"Pointer size: {pointer_size}")
+                golog.debug(f"runtime.buildversion ptr: {hex(runtime_buildver_addr)}")
+                golog.debug(f"runtime.modinfo ptr: {hex(runtime_modinfo_addr)}")
+
+                golog.debug(proc_layer.read(runtime_buildver_addr, 0xff))
+                golog.debug(proc_layer.read(runtime_modinfo_addr, 0xff))
 
 
-        return go_version
+                # golog.debug(data)
+
+
+        return go_version, runtime_buildver_addr, runtime_modinfo_addr
 
 
     def _generator(self, tasks):
@@ -185,8 +214,8 @@ class Go(interfaces.plugins.PluginInterface):
             comm = utility.array_to_string(task.comm)
             golog.debug(f"PID:{pid} COMM:{comm}")
 
-            go_version = self.enum_task_struct(task, proc_layer)
+            go_version, buildver, modinfo = self.enum_task_struct(task, proc_layer)
 
-            yield (0, (task.pid, comm, go_version))
+            yield (0, (task.pid, comm, go_version, format_hints.Hex(buildver), format_hints.Hex(modinfo)))
 
                 

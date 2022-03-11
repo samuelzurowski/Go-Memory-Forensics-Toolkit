@@ -187,9 +187,6 @@ class Go(interfaces.plugins.PluginInterface):
 
             go_version = self.enum_task_struct(task, proc_layer)
 
-            if go_version == "":
-                continue
-
             yield (0, (task.pid, comm, go_version))
 
                 

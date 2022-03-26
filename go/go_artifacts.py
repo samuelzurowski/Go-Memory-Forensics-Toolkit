@@ -1,8 +1,5 @@
-from operator import mod
 from typing import List, Callable, Any, Tuple
 import logging, struct, binascii
-from typing_extensions import runtime
-from magic import version
 
 from volatility3.framework import renderers, interfaces, constants
 from volatility3.framework.configuration import requirements
@@ -22,7 +19,7 @@ import yara
 # https://github.com/volatilityfoundation/volatility3/blob/develop/volatility3/framework/symbols/linux/extensions/__init__.py
 golog = logging.getLogger(__name__)
 
-class Go(interfaces.plugins.PluginInterface):
+class GoArtifacts(interfaces.plugins.PluginInterface):
     _required_framework_version = (2, 0, 0)
 
     _32BIT = False
@@ -39,18 +36,12 @@ class Go(interfaces.plugins.PluginInterface):
                 name = 'pid', 
                 element_type=int,
                 description="Process PIDS.",
-                optional=True
-            ),
-            requirements.ListRequirement(
-                name='procName',
-                element_type=str,
-                description='Proc name',
-                optional=True
+                optional=False
             )
         ]
 
     @classmethod
-    def proc_name_filter(cls, pid_name_list: List[str] = None) -> Callable[[Any], bool]:
+    def proc_filter_pid(cls, pid_name_list: List[int] = None) -> Callable[[Any], bool]:
         """Constructs a filter function for process Names.
         Args:
             pid_name_list: List of process names that are acceptable (or None if all are acceptable)
@@ -63,7 +54,7 @@ class Go(interfaces.plugins.PluginInterface):
         if filter_list:
             def filter_func(x):
                 # get the string from the comm for the process name
-                return utility.array_to_string(x.comm) not in filter_list
+                return x.pid not in filter_list
 
             return filter_func
         else:
@@ -72,9 +63,7 @@ class Go(interfaces.plugins.PluginInterface):
     def run(self):
         golog.info("Plugin is now Starting to Run!")
 
-        filter_func = self.proc_name_filter(
-            self.config.get('procName')
-        )
+        filter_func = self.proc_filter_pid(self.config.get('pid'))
 
         list_procs = pslist.PsList.list_tasks(
             self.context,
@@ -86,7 +75,6 @@ class Go(interfaces.plugins.PluginInterface):
             [
                 ("PID", int),
                 ("COMM", str),
-                ("GO_VERSION", str),
                 ("GoVer PTR", format_hints.Hex),
                 ("MOD_INFO PTR", format_hints.Hex)
 
@@ -110,37 +98,9 @@ class Go(interfaces.plugins.PluginInterface):
         return False
 
 
-    def get_go_metadata(self, scanner: interfaces.layers.ScannerInterface, proc_layer: intel.Intel, sections: List[Tuple]) -> str:
-        hit_counter = 0
-        metadata = ""
-
-        for offset in proc_layer.scan(
-            context=self.context,
-            scanner=scanner,
-            sections=sections
-        ):
-
-            data = proc_layer.read(offset, 0xff, pad=True)
-
-            data_index = data.find(b'\x00')
-
-            if data_index > 0:
-                golog.debug(data[:data_index].strip())
-
-                metadata = data[:data_index].decode()
-                hit_counter += 1
-            
-            if hit_counter > 2:
-                return ""
-        
-        if hit_counter < 2:
-            return metadata
-
-        return ""
-
     def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel) -> str:
 
-        golog.info(f"PROC ID: {task.pid}")
+        golog.debug(f"PROC ID: {task.pid}")
 
         vma_regions = []
         for vma in task.mm.get_mmap_iter():
@@ -149,49 +109,44 @@ class Go(interfaces.plugins.PluginInterface):
 
             vma_regions.append((vm_start, vm_end-vm_start))
 
-        go_version = self.get_go_metadata(
-            scanner=scanners.RegExScanner(rb"go[0-9]+\.[0-9]+\.[0-9]+[^.\s]+"),
-            proc_layer=proc_layer,
+        runtime_buildver_addr = 0
+        runtime_modinfo_addr = 0
+
+        golog.debug("parsing buildinfo now.\n")
+        for offset in proc_layer.scan(
+            context=self.context,
+            scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
             sections=vma_regions
-        )
+        ):
 
-        golog.info(f"Go version: {go_version}")
-        if go_version != "":
-            golog.info("parsing buildinfo now.\n")
-            for offset in proc_layer.scan(
-                context=self.context,
-                scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
-                sections=vma_regions
-            ):
+            data = proc_layer.read(offset, 0xff)
 
-                data = proc_layer.read(offset, 0xff)
+            pointer_size = struct.unpack("<H", data[14:16])[0]
 
-                pointer_size = struct.unpack("<H", data[14:16])[0]
+            endianess = data[15] & 2
 
-                endianess = data[15] & 2
+            endian = ""
+            if endianess == 0:
+                golog.info("Little-endian program.")
+                endian = "<"
+            else:
+                endian = ">"
 
-                endian = ""
-                if endianess == 0:
-                    golog.info("Little-endian program.")
-                    endian = "<"
-                else:
-                    endian = ">"
+            runtime_buildver_addr = struct.unpack(f"{endian}Q", data[16:16+pointer_size])[0]
+            runtime_modinfo_addr = struct.unpack(f"{endian}Q", data[16+pointer_size:16+(pointer_size*2)])[0]
 
-                runtime_buildver_addr = struct.unpack(f"{endian}Q", data[16:16+pointer_size])[0]
-                runtime_modinfo_addr = struct.unpack(f"{endian}Q", data[16+pointer_size:16+(pointer_size*2)])[0]
+            golog.debug(f"Pointer size: {pointer_size}")
+            golog.debug(f"runtime.buildversion ptr: {hex(runtime_buildver_addr)}")
+            golog.debug(f"runtime.modinfo ptr: {hex(runtime_modinfo_addr)}")
 
-                golog.debug(f"Pointer size: {pointer_size}")
-                golog.debug(f"runtime.buildversion ptr: {hex(runtime_buildver_addr)}")
-                golog.debug(f"runtime.modinfo ptr: {hex(runtime_modinfo_addr)}")
-
-                golog.debug(proc_layer.read(runtime_buildver_addr, 0xff))
-                golog.debug(proc_layer.read(runtime_modinfo_addr, 0xff))
+            golog.debug(proc_layer.read(runtime_buildver_addr, 0xff))
+            golog.debug(proc_layer.read(runtime_modinfo_addr, 0xff))
 
 
                 # golog.debug(data)
 
 
-        return go_version, runtime_buildver_addr, runtime_modinfo_addr
+        return runtime_buildver_addr, runtime_modinfo_addr
 
 
     def _generator(self, tasks):
@@ -214,8 +169,8 @@ class Go(interfaces.plugins.PluginInterface):
             comm = utility.array_to_string(task.comm)
             golog.debug(f"PID:{pid} COMM:{comm}")
 
-            go_version, buildver, modinfo = self.enum_task_struct(task, proc_layer)
+            buildver, modinfo = self.enum_task_struct(task, proc_layer)
 
-            yield (0, (task.pid, comm, go_version, format_hints.Hex(buildver), format_hints.Hex(modinfo)))
+            yield (0, (task.pid, comm, format_hints.Hex(buildver), format_hints.Hex(modinfo)))
 
                 

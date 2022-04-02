@@ -33,6 +33,11 @@ class GoHunt(interfaces.plugins.PluginInterface):
                 element_type=int,
                 description="Process PIDS.",
                 optional=True
+            ),
+            requirements.BooleanRequirement(name='regex',
+                description="Attempt to find a go version with regex.",
+                default=False,
+                optional=True
             )
         ]
 
@@ -74,38 +79,21 @@ class GoHunt(interfaces.plugins.PluginInterface):
                 ("PID", int),
                 ("COMM", str),
                 ("GO_VERSION", str),
-                ("OFFSET", format_hints.Hex)
+                ("VIRTUAL OFFSET", format_hints.Hex)
             ],
             generator=self._generator(list_procs)
         )
-    def get_go_metadata(self, scanner: interfaces.layers.ScannerInterface, proc_layer: intel.Intel, sections: List[Tuple]):
-        hit_counter = 0
-        metadata = ""
-        hit_addrs = []
 
-        for offset in proc_layer.scan(
-            context=self.context,
-            scanner=scanner,
-            sections=sections
-        ):
+    def check_go_version(self, pointer_size, endian, go_build_data: bytes, proc_layer) -> str:
+        golog.debug(f"VER: {go_build_data}")
+        # get string of go version
+        go_ver_ptr = struct.unpack(f"{endian}Q",go_build_data[:pointer_size])[0]
+        go_versioninfo_data = proc_layer.read(go_ver_ptr, 0xff)
+        golog.debug(f"Version info: {go_versioninfo_data}")
+        
+        return go_versioninfo_data.split(b'\x00')[0].decode()
 
-            data = proc_layer.read(offset, 0xff, pad=True)
-
-            data_index = data.find(b'\x00')
-
-            if data_index > 0:
-                golog.debug(data[:data_index].strip())
-
-                metadata = data[:data_index].decode()
-                hit_counter += 1
-                hit_addrs.append(offset)
-            
-            if hit_counter > 2:
-                return "", []
-
-        return metadata, hit_addrs
-
-    def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel) -> str:
+    def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel, use_regex: bool) -> str:
         
         golog.debug(f"PROC ID: {task.pid}")
 
@@ -116,18 +104,76 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
             vma_regions.append((vm_start, vm_end-vm_start))
 
-        go_version = self.get_go_metadata(
-            scanner=scanners.RegExScanner(rb"go[0-9]+\.[0-9]+\.[0-9]+[^.\s]+"),
-            proc_layer=proc_layer,
+
+
+        golog.debug("parsing buildinfo now.\n")
+
+        if use_regex:
+            for offset in proc_layer.scan(
+                context=self.context,
+                scanner=scanners.RegExScanner(rb"go[0-9]+\.[0-9]+\.[0-9]+[^.\s]+"),
+                sections=vma_regions
+            ):
+
+                data = proc_layer.read(offset, 0xff, pad=True)
+
+                data_index = data.find(b'\x00')
+
+                golog.debug(data[:data_index].strip())
+
+                metadata = data[:data_index].decode()
+
+                yield metadata, offset
+
+            return
+
+        for offset in proc_layer.scan(
+            context=self.context,
+            scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
             sections=vma_regions
-        )
+        ):
 
-        return go_version
+            data = proc_layer.read(offset, 0xff)
 
+            pointer_size = struct.unpack("<H", data[14:16])[0]
+            golog.info(f"Pointer size: {pointer_size}")
+
+            if pointer_size != 8 and pointer_size != 4:
+                # case we find the data in a VMA region but not parseable
+                # in most cases this is due to a copy of it. But realistically it is not the information 
+                # some would want to look for.
+                yield "INVALID_STRUCTURE", offset
+                continue
+
+            endianess = data[15] & 2
+
+            endian = ""
+            if endianess == 0:
+                golog.info("Little-endian program.")
+                endian = "<"
+            else:
+                endian = ">"
+
+            golog.info(f"offset: {hex(offset)}")
+            golog.debug(f"Start_data: {data}")
+            golog.debug(f"len: {len(data[16+pointer_size:16+(pointer_size*2)])}")
+            runtime_buildver_addr = struct.unpack(f"{endian}Q", data[16:16+pointer_size])[0]
+            runtime_modinfo_addr = struct.unpack(f"{endian}Q", data[16+pointer_size:16+(pointer_size*2)])[0]
+
+            golog.debug(f"Pointer size: {pointer_size}")
+            golog.debug(f"runtime.buildversion ptr: {hex(runtime_buildver_addr)}")
+            golog.debug(f"runtime.modinfo ptr: {hex(runtime_modinfo_addr)}")
+
+            # go buildver
+            go_build_data = proc_layer.read(runtime_buildver_addr, 0xff)
+            go_version = self.check_go_version(pointer_size, endian, go_build_data, proc_layer)
+
+            yield go_version, offset
 
 
 
     def _generator(self, tasks):
+        use_regex = self.config.get('regex')
         for task in tasks:
             if not task.mm:
                 continue
@@ -144,10 +190,6 @@ class GoHunt(interfaces.plugins.PluginInterface):
             comm = utility.array_to_string(task.comm)
             golog.debug(f"PID:{pid} COMM:{comm}")
 
-            go_version, offsets = self.enum_task_struct(task, proc_layer)
-
-            for offset in offsets:
-
+            for go_version, offset in self.enum_task_struct(task, proc_layer, use_regex):
                 yield (0, (task.pid, comm, go_version, format_hints.Hex(offset)))
-
                 

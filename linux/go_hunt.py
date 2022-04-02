@@ -36,7 +36,8 @@ class GoHunt(interfaces.plugins.PluginInterface):
                 description="Attempt to find a go version with regex.",
                 default=False,
                 optional=True
-            )
+            ),
+            requirements.PluginRequirement(name='pslist', plugin=pslist.PsList, version=(2, 0, 0))
         ]
 
     @classmethod

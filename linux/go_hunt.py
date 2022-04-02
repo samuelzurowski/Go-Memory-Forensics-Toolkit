@@ -17,7 +17,7 @@ golog = logging.getLogger(__name__)
 
 class GoHunt(interfaces.plugins.PluginInterface):
     _required_framework_version = (2, 0, 0)
-    
+
     @classmethod
     def get_requirements(cls) -> List[interfaces.configuration.RequirementInterface]:
         return [
@@ -89,12 +89,13 @@ class GoHunt(interfaces.plugins.PluginInterface):
         go_versioninfo_data = proc_layer.read(go_ver_ptr, 0xff)
         golog.debug(f"Version info: {go_versioninfo_data}")
         
-        return go_versioninfo_data.split(b'\x00')[0].decode()
+        return go_versioninfo_data.split(b'\x00')[0].decode() # the go version is null terminated so this works.
 
     def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel, use_regex: bool) -> str:
         
         golog.debug(f"PROC ID: {task.pid}")
 
+        # get all the VMA regions to search through.
         vma_regions = []
         for vma in task.mm.get_mmap_iter():
             vm_start = vma.vm_start
@@ -107,6 +108,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
         golog.debug("parsing buildinfo now.\n")
 
         if use_regex:
+            # this mode just looks for the go build id using regex.
             for offset in proc_layer.scan(
                 context=self.context,
                 scanner=scanners.RegExScanner(rb"go[0-9]+\.[0-9]+\.[0-9]+[^.\s]+"),
@@ -125,6 +127,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
             return
 
+        # this is how the go version can be found.
         for offset in proc_layer.scan(
             context=self.context,
             scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
@@ -172,6 +175,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
     def _generator(self, tasks):
         use_regex = self.config.get('regex')
+
         for task in tasks:
             if not task.mm:
                 continue

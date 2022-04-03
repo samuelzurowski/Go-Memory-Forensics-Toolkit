@@ -1,5 +1,6 @@
 from typing import List, Callable, Any
 import logging, struct
+from numpy import require
 
 from volatility3.framework import renderers, interfaces
 from volatility3.framework.configuration import requirements
@@ -7,9 +8,21 @@ from volatility3.framework.layers import scanners, intel
 from volatility3.framework.renderers import format_hints
 from volatility3.framework.objects import utility
 from volatility3.plugins.linux import pslist
-import ctypes
+from volatility3.plugins import yarascan
+import re
+import yara
 
 from volatility3.framework.symbols.linux.extensions import task_struct
+
+
+
+YARA_GO = {
+    "opcodes":
+       'rule go_bytes { \
+        strings:  $magic_bytes_lookup16 = {(FF FF FF FA | FA FF FF FF) 00 00 01 08}  \
+        condition: $magic_bytes_lookup16 \
+    }'
+}
 
 """
 type moduledata struct {
@@ -79,7 +92,13 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
                 element_type=int,
                 description="Process PIDS.",
                 optional=False
-            )
+            ),
+            requirements.BooleanRequirement(name='static',
+                description="Attempts to find static strings",
+                default=False,
+                optional=True
+            ),
+            requirements.PluginRequirement(name='pslist', plugin=pslist.PsList, version=(2, 0, 0))
         ]
 
     @classmethod
@@ -113,18 +132,33 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             filter_func=filter_func
         )
         
-        return renderers.TreeGrid(
-            [
-                ("PID", int),
-                ("COMM", str),
-                ("GoVer PTR", format_hints.Hex),
-                ("MOD_INFO PTR", format_hints.Hex),
-                ("PCHEADER PTR", format_hints.Hex),
-                ("GO_Version", str)
 
-            ],
-            generator=self._generator(list_procs)
-        )
+        static_mode = self.config.get('static')
+
+        if static_mode:
+            return renderers.TreeGrid(
+                [
+                    ("PID", int),
+                    ("COMM", str),
+                    ("Function", str)
+
+                ],
+                generator=self._generator(list_procs)
+            )
+        
+        else:
+            return renderers.TreeGrid(
+                [
+                    ("PID", int),
+                    ("COMM", str),
+                    ("GoVer PTR", format_hints.Hex),
+                    ("MOD_INFO PTR", format_hints.Hex),
+                    ("PCHEADER PTR", format_hints.Hex),
+                    ("GO_Version", str)
+
+                ],
+                generator=self._generator(list_procs)
+            )
 
     def _check_32bit(self, task: task_struct, proc_layer: intel) -> bool:
 
@@ -151,7 +185,18 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
         
         return go_versioninfo_data.split(b'\x00')[0].decode()
 
-    def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel) -> str:
+
+    def last_static_str(self, str_arr):
+        """Simple function that finds the last static string."""
+        counter = 0
+        for s in str_arr:
+            for i in range(len(s)):
+                if s[i] not in range(32,126):
+                    return counter
+            counter += 1
+        return len(str_arr)
+
+    def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel, static_mode: bool) -> str:
 
         golog.debug(f"PROC ID: {task.pid}")
 
@@ -164,6 +209,100 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
 
         runtime_buildver_addr = 0
         runtime_modinfo_addr = 0
+
+        """
+        const (
+            go12magic  = 0xfffffffb
+            go116magic = 0xfffffffa
+            go118magic = 0xfffffff0
+        )
+        """
+        
+        rules = yara.compile(sources=YARA_GO)
+        for offset, rule_name, name, value in proc_layer.scan(
+                self.context,
+                scanner=yarascan.YaraScanner(rules=rules),
+                sections=vma_regions
+        ):
+            golog.debug(f"Offset {offset}")
+            data = proc_layer.read(offset, 0xff)
+
+            magic_bytes = data[:4]
+
+            # 5 and 6 are padding
+            padding = data[4:6]
+
+            ptr_size = data[7]
+
+            quantum = data[8]
+
+            # size of function symbol table
+            nfunctab = struct.unpack("<Q",data[8:16])[0]
+            
+            func_offset = struct.unpack("<Q", data[16:24])[0]
+
+
+            # this is where symbols starts
+            cu_offset = struct.unpack("<Q", data[24:32])[0]
+
+            filetab_offset = struct.unpack("<Q", data[32:40])[0]
+            
+            # pc tab offset to filetab variable
+            pctab_offset = struct.unpack("<Q", data[40:48])[0]
+
+            pcln_offset = struct.unpack("<Q", data[48:56])[0]
+
+            #// functabFieldSize returns the size in bytes of a single functab field.
+            #func (t *LineTable) functabFieldSize() int {
+            #    if t.version >= ver118 {
+            #        return 4
+            #    }
+            #    return int(t.ptrsize)
+            #}
+
+            # TODO: handle case for go.18>
+            functabsize = (nfunctab*2 + 1) * 8
+
+            lower, length = [(lower, upper) for (lower,upper) in vma_regions if lower <= offset <= lower+upper][0]
+
+
+            cached_names_offset = offset+cu_offset
+            golog.debug(f"cached offset {cached_names_offset}")
+
+            read_size = length - (offset - lower) 
+
+            cu_data = proc_layer.read(cached_names_offset, read_size, pad=True)
+
+            cu_data = re.sub(rb"\xc2\xb7", b'.', cu_data)
+
+            cu_data = cu_data.split(b'\x00')
+            cu_data = [i for i in cu_data if i]
+
+            idx = self.last_static_str(cu_data)
+            golog.debug(idx)
+            golog.debug(cu_data[:10])
+
+
+            if static_mode:
+                return 0x0, 0x0, 0x0, "", [x.decode('utf-8') for x in cu_data[:idx]]
+
+            
+
+
+            golog.debug(f"Pointersize: {ptr_size}")
+            golog.debug(f"Instruction size: {quantum}")
+            golog.debug(f"Padding {padding}")
+            golog.debug(f"nfunc: {hex(nfunctab)}")
+            golog.debug(f"func_offset: {hex(func_offset)}")
+            golog.debug(f"cuoffset {cu_offset}")
+            golog.debug(f"filetab_offset {filetab_offset}")
+            golog.debug(f"pctab_offset {pctab_offset}")
+            golog.debug(f"pcln_offset {pcln_offset}")
+            golog.debug(f"Function tab size: {functabsize}")
+            golog.debug(f"MAGIC_BYTES: {magic_bytes}")
+            
+
+        static_strings = []
 
         golog.debug("parsing buildinfo now.\n")
         for offset in proc_layer.scan(
@@ -218,10 +357,11 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
 
 
 
-        return runtime_buildver_addr, runtime_modinfo_addr, pc_header_addr, go_version
+        return runtime_buildver_addr, runtime_modinfo_addr, pc_header_addr, go_version, static_strings
 
 
     def _generator(self, tasks):
+        static_mode = self.config.get('static')
         for task in tasks:
             if not task.mm:
                 continue
@@ -241,7 +381,12 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             comm = utility.array_to_string(task.comm)
             golog.debug(f"PID:{pid} COMM:{comm}")
 
-            buildver, modinfo, pcheader, go_version = self.enum_task_struct(task, proc_layer)
+            buildver, modinfo, pcheader, go_version, static_strings = self.enum_task_struct(task, proc_layer, static_mode)
+
+            if static_mode:
+                for string in static_strings:
+                    yield (0, (task.pid, comm, string.strip()))
+                return
 
             yield (0, (task.pid, comm, format_hints.Hex(buildver), format_hints.Hex(modinfo), format_hints.Hex(pcheader), go_version))
 

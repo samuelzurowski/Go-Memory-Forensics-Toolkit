@@ -89,6 +89,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
         go_ver_ptr = struct.unpack(f"{endian}Q",go_build_data[:pointer_size])[0]
         go_versioninfo_data = proc_layer.read(go_ver_ptr, 0xff)
         golog.debug(f"Version info: {go_versioninfo_data}")
+        # use go_ver_ptr instead of normal buildinfo offset.
         
         return go_versioninfo_data.split(b'\x00')[0].decode() # the go version is null terminated so this works.
 
@@ -106,7 +107,6 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
 
 
-        golog.debug("parsing buildinfo now.\n")
 
         if use_regex:
             # this mode just looks for the go build id using regex.
@@ -134,7 +134,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
             scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
             sections=vma_regions
         ):
-
+            golog.debug("parsing buildinfo now.\n")
             data = proc_layer.read(offset, 0xff)
 
             pointer_size = struct.unpack("<H", data[14:16])[0]
@@ -195,4 +195,3 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
             for go_version, offset in self.enum_task_struct(task, proc_layer, use_regex):
                 yield (0, (task.pid, comm, go_version, format_hints.Hex(offset)))
-                

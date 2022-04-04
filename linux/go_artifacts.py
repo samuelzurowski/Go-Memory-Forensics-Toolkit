@@ -210,6 +210,14 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
         runtime_buildver_addr = 0
         runtime_modinfo_addr = 0
 
+        for offset in proc_layer.scan(
+                context=self.context,
+                scanner=scanners.BytesScanner(b"Pandas"),
+                sections=vma_regions
+        ):
+            golog.info(hex(offset))
+
+        exit(0)
         """
         const (
             go12magic  = 0xfffffffb
@@ -380,6 +388,7 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             pid = task.pid
             comm = utility.array_to_string(task.comm)
             golog.debug(f"PID:{pid} COMM:{comm}")
+
 
             buildver, modinfo, pcheader, go_version, static_strings = self.enum_task_struct(task, proc_layer, static_mode)
 

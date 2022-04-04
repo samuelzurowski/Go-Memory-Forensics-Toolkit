@@ -91,7 +91,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
         golog.debug(f"Version info: {go_versioninfo_data}")
         # use go_ver_ptr instead of normal buildinfo offset.
         
-        return go_versioninfo_data.split(b'\x00')[0].decode() # the go version is null terminated so this works.
+        return go_versioninfo_data.split(b'\x00')[0].decode(), go_ver_ptr # the go version is null terminated so this works.
 
     def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel, use_regex: bool) -> str:
         
@@ -168,9 +168,9 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
             # go buildver
             go_build_data = proc_layer.read(runtime_buildver_addr, 0xff)
-            go_version = self.check_go_version(pointer_size, endian, go_build_data, proc_layer)
+            go_version, go_ptr = self.check_go_version(pointer_size, endian, go_build_data, proc_layer)
 
-            yield go_version, offset
+            yield go_version, go_ptr
 
 
 

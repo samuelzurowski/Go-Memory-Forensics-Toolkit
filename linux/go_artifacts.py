@@ -371,7 +371,6 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
                 sub_data = re.sub(rb"\t", b' ', sub_data)
                 sub_data = re.sub(rb"mod\t", b'', sub_data).split(b'\n')[1:-1]
                 
-                golog.debug(sub_data)
                 static_strings = [x.decode('utf-8').lstrip() for x in sub_data]
 
 

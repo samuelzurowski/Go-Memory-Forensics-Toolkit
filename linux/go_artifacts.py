@@ -19,8 +19,10 @@ from volatility3.framework.symbols.linux.extensions import task_struct
 YARA_GO = {
     "opcodes":
        'rule go_bytes { \
-        strings:  $magic_bytes_lookup16 = {(FF FF FF FA | FA FF FF FF) 00 00 01 08}  \
-        condition: $magic_bytes_lookup16 \
+        strings:  \
+            $magic_bytes_lookup16 = {(FF FF FF FA | FA FF FF FF) 00 00 01 08}  \
+            $magic_bytes_12 = {(FF FF FF FB | FB FF FF FF) 00 00 01 08} \
+        condition: $magic_bytes_lookup16 or $magic_bytes_12 \
     }'
 }
 
@@ -181,9 +183,10 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
         # get string of go version
         go_ver_ptr = struct.unpack(f"{endian}Q",go_build_data[:pointer_size])[0]
         go_versioninfo_data = proc_layer.read(go_ver_ptr, 0xff)
+        data_index = re.search(rb'go[0-9]+\.[0-9]+\.[0-9]+',go_versioninfo_data).end()
         golog.debug(f"Version info: {go_versioninfo_data}")
         
-        return go_versioninfo_data.split(b'\x00')[0].decode()
+        return go_versioninfo_data[:data_index].decode()
 
 
     def last_static_str(self, str_arr):
@@ -210,28 +213,25 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
         runtime_buildver_addr = 0
         runtime_modinfo_addr = 0
 
-        for offset in proc_layer.scan(
-                context=self.context,
-                scanner=scanners.BytesScanner(b"Pandas"),
-                sections=vma_regions
-        ):
-            golog.info(hex(offset))
-
-        exit(0)
-        """
-        const (
-            go12magic  = 0xfffffffb
-            go116magic = 0xfffffffa
-            go118magic = 0xfffffff0
-        )
-        """
+        # exit(0)
+        # """
+        # const (
+        #     go12magic  = 0xfffffffb
+        #     go116magic = 0xfffffffa
+        #     go118magic = 0xfffffff0
+        # )
+        # """
         
         rules = yara.compile(sources=YARA_GO)
+        golog.debug("Scanning yara.")
         for offset, rule_name, name, value in proc_layer.scan(
                 self.context,
                 scanner=yarascan.YaraScanner(rules=rules),
                 sections=vma_regions
         ):
+            if name == "$magic_bytes_12":
+                break
+
             golog.debug(f"Offset {offset}")
             data = proc_layer.read(offset, 0xff)
 
@@ -287,11 +287,15 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             cu_data = [i for i in cu_data if i]
 
             idx = self.last_static_str(cu_data)
-            golog.debug(idx)
+            golog.debug(f"CU_IDX: {idx}")
             golog.debug(cu_data[:10])
 
 
             if static_mode:
+
+                if idx == 0:
+                    return 0x0, 0x0, 0x0, "", [x.decode('utf-8') for x in cu_data]
+                
                 return 0x0, 0x0, 0x0, "", [x.decode('utf-8') for x in cu_data[:idx]]
 
             
@@ -319,6 +323,7 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             sections=vma_regions
         ):
 
+            golog.debug(f"OFFSET: {hex(offset)}")
             data = proc_layer.read(offset, 0xff)
 
             pointer_size = struct.unpack("<H", data[14:16])[0]
@@ -360,6 +365,14 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             # pcheader table data
             pcheader = proc_layer.read(pc_header_addr, pc_header_len)
             golog.debug(f"PCHEADER: {pcheader}")
+            if "go1.13" in go_version:
+                sub_data = re.sub(rb"dep\t", b'', pcheader)
+                sub_data = re.sub(rb"path\t", b'', sub_data)
+                sub_data = re.sub(rb"\t", b' ', sub_data)
+                sub_data = re.sub(rb"mod\t", b'', sub_data).split(b'\n')[1:-1]
+                
+                golog.debug(sub_data)
+                static_strings = [x.decode('utf-8').lstrip() for x in sub_data]
 
 
 
@@ -388,6 +401,13 @@ class GoArtifacts(interfaces.plugins.PluginInterface):
             pid = task.pid
             comm = utility.array_to_string(task.comm)
             golog.debug(f"PID:{pid} COMM:{comm}")
+
+            vma_regions = []
+            for vma in task.mm.get_mmap_iter():
+                vm_start = vma.vm_start
+                vm_end   = vma.vm_end
+                vma_regions.append((vm_start, vm_end))
+
 
 
             buildver, modinfo, pcheader, go_version, static_strings = self.enum_task_struct(task, proc_layer, static_mode)

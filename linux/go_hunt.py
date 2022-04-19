@@ -1,5 +1,5 @@
 from typing import List, Callable, Any, Tuple
-import logging, struct, binascii
+import logging, struct, binascii, re
 
 from volatility3.framework import renderers, interfaces, constants
 from volatility3.framework.configuration import requirements
@@ -88,10 +88,12 @@ class GoHunt(interfaces.plugins.PluginInterface):
         # get string of go version
         go_ver_ptr = struct.unpack(f"{endian}Q",go_build_data[:pointer_size])[0]
         go_versioninfo_data = proc_layer.read(go_ver_ptr, 0xff)
+        data_index = re.search(rb'go[0-9]+\.[0-9]+\.[0-9]+',go_versioninfo_data).end()
+
         golog.debug(f"Version info: {go_versioninfo_data}")
         # use go_ver_ptr instead of normal buildinfo offset.
         
-        return go_versioninfo_data.split(b'\x00')[0].decode(), go_ver_ptr # the go version is null terminated so this works.
+        return go_versioninfo_data[:data_index].decode(), go_ver_ptr # the go version is null terminated so this works.
 
     def enum_task_struct(self, task: task_struct, proc_layer: intel.Intel, use_regex: bool) -> str:
         
@@ -118,7 +120,9 @@ class GoHunt(interfaces.plugins.PluginInterface):
 
                 data = proc_layer.read(offset, 0xff, pad=True)
 
-                data_index = data.find(b'\x00')
+                data_index = re.search(rb'go[0-9]+\.[0-9]+\.[0-9]+',data).end()
+
+
 
                 golog.debug(data[:data_index].strip())
 
@@ -132,8 +136,10 @@ class GoHunt(interfaces.plugins.PluginInterface):
         for offset in proc_layer.scan(
             context=self.context,
             scanner=scanners.BytesScanner(b"\xff Go buildinf:"),
+            # scanner=scanners.BytesScanner(b"\x60\xe9\x9b"),
             sections=vma_regions
         ):
+            golog.debug(f'Build info addr: {offset}')
             golog.debug("parsing buildinfo now.\n")
             data = proc_layer.read(offset, 0xff)
 

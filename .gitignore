@@ -157,3 +157,6 @@ cython_debug/
 *.txt
 *.vol3
 *.dmp
+
+
+screenshot/

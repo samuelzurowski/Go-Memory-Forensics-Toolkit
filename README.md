@@ -5,7 +5,7 @@
 
 ## Hunting for a Go Process
 
-To do this the plugin `go.go_hunt` is utilized. There are two ways to run this plugin. The first manner requires no flags and the second way uses the `--regex` flag. The reason for this flag is sometimes the *buildinfo* information could potentially be obfuscated or data may not be loaded by the executable. However, the regex method has a higher chance of false positives. Regex should only be used if structures aren't being parsed properly. So for older versions of golang the structure is slighty different which will enable you to grab that information. Mainly Golang 1.17+ is supported. 
+To do this the plugin `linux.go_hunt` is utilized. There are two ways to run this plugin. The first manner requires no flags and the second way uses the `--regex` flag. The reason for this flag is sometimes the *buildinfo* information could potentially be obfuscated or data may not be loaded by the executable. However, the regex method has a higher chance of false positives. Regex should only be used if structures aren't being parsed properly. So for older versions of golang the structure is slighty different which will enable you to grab that information. Mainly Golang 1.17+ is supported. 
 
 
 The most basic usage of `go_hunt` for linux:

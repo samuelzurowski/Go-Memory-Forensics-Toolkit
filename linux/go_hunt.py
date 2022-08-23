@@ -32,7 +32,7 @@ class GoHunt(interfaces.plugins.PluginInterface):
                 description="Process PIDS.",
                 optional=True
             ),
-            requirements.BooleanRequirement(name='regex',
+            requirements.BooleanRequirement(name='regex', # for older plugin versions use regex.
                 description="Attempt to find a go version with regex.",
                 default=False,
                 optional=True

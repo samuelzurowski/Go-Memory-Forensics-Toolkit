@@ -2,6 +2,7 @@
 
 [Go](https://go.dev/) is a popular program language used because of its portability and ease of usage. However, in the recent years there has been a 2000% increase of new malware written in Go \[[1](https://www.zdnet.com/article/go-malware-is-now-common-having-been-adopted-by-both-apts-and-e-crime-groups/)\]. Therefore, this toolkit was written to be able to analyze memory dumps for finding golang processes and information that can be used to determine more information about malware.
 
+# Created by Samuel Zurowski
 
 ## Hunting for a Go Process
 
